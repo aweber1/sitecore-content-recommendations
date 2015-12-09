@@ -1,4 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<sitecore xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
-	<sc.variable xdt:Locator="Match(name)" xdt:Transform="Replace" name="dataFolder" value="E:\DEV\SC\MspUg\Sites\8.1\Data" />	
-</sitecore>
