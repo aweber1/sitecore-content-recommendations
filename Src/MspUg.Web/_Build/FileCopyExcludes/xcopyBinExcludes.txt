@@ -1,0 +1,4 @@
+#First line ignored by xcopy
+.xaml
+.html
+.xap

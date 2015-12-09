@@ -1,0 +1,89 @@
+﻿@using MspUg.Web.Controllers
+@using Sitecore.Mvc
+@{
+    //flusha da the session
+    //((TrackerToolsController) ViewContext.Controller).FlushSession();
+    var blee = Html.Sitecore().Controller("TrackerTools", "FlushSession");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flush</title>
+    <meta name="robots" content="follow, index" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/assets/css/bootstrap.css" />
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/assets/css/custom.css" />
+    <link rel="stylesheet" href="/assets/css/responsive.css" />
+    <style>
+        #over {
+            background: url('/assets/img/flush.jpg') no-repeat center center;
+            position: fixed;
+            width: 100%;
+            height: 1000px;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .presets li {
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div id="out_container">
+        <!-- MAIN CONTENT AREA -->
+        <div class="main-content">
+            <div class="container">
+                <div class="row">
+                    <h1>Your session was flushed successfully.</h1>
+                    <h3>
+                        Start over in a default session <a href="/">here</a>, or use one of the session presets:
+                    </h3>
+                </div>
+                <div class="row">
+                    <div class="span4">
+                        <h4>Campaigns:</h4>
+                        <ul class="presets">
+                            <li>
+                                <a href="/?sc_camp=B1CA4F7DC6EC4A41A9A58A01B0FCC24F">ABC campaign</a>
+                            </li>
+                            <li><a href="/?sc_camp=EC6599A5A68244CF8CDA132EC6C14F4E">123 campaign</a></li>
+                        </ul>
+                    </div>
+                    <div class="span4">
+                        <h4>Online Channels:</h4>
+                        <ul class="presets">
+                            <li><a href="/?ch={B55EC2C2-CD7A-4E03-B155-EEFDAE872B7D}">Bing Ads channel</a></li>
+                            <li><a href="/?ch={FB8FA660-0A07-4EE9-A9F4-930FC5D10AEC}">Search Organic Branded channel</a></li>
+                        </ul>
+                    </div>
+                    <div class="span4">
+                        <h4>Offline Channels:</h4>
+                        <ul class="presets">
+                            <li><a href="/?ch={3FC61BB8-0D9F-48C7-9BBD-D739DCBBE032}">Enter store channel</a></li>
+                            <li><a href="/?ch={EFC249EF-3010-405F-80D4-D265F27BDDDB}">Print Advertising channel</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="mtp-toggle">
+        <i class="moon-droplet"></i>
+    </div>
+    <div id="mtp-wrapper">
+        <div id="mtp-content">
+            @Html.Sitecore().Rendering("{5DC72CF0-EDFF-4524-B2DB-81415CFF3434}") <!-- Visit Details -->
+        </div>
+    </div>
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write("<script src='/assets/js/jquery-1.11.1.min.js'><\/script>")</script>
+    <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/assets/js/custom.js"></script>
+</body>
+</html>

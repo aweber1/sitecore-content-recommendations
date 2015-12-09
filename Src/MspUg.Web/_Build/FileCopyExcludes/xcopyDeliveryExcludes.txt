@@ -1,0 +1,35 @@
+﻿#First line ignored by xcopy
+.cs\
+.csproj
+.user
+.proj
+.gpstate
+\obj\
+\Properties\
+\WebControls\
+\Web References\
+\bin\
+\Build\
+\_Build\
+\BuildConfig\
+msbuild.log
+.suo
+.SCC
+.svn
+.vspscc
+\classes\
+\Entities\
+\ItemIDs\
+\Pipelines\
+\TemplateIDs\
+\UI\
+\Workflows\
+\App_Data\
+\Data\Managers\
+\Xml\Xsl\
+\Service References\
+\Publishing\
+\CodeGen\
+packages.config
+.Debug.config
+.Release.config

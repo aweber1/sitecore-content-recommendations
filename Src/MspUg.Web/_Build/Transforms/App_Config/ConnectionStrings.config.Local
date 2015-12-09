@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<connectionStrings xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+	<!-- 
+    Sitecore connection strings.
+    All database connections for Sitecore are configured here.
+  -->
+	<add xdt:Locator="Match(name)" xdt:Transform="Replace" name="core" connectionString="user id=sa;password=password1;Data Source=devserver3;Database=SC_MspUg81_Core" />
+	<add xdt:Locator="Match(name)" xdt:Transform="Replace" name="master" connectionString="user id=sa;password=password1;Data Source=devserver3;Database=SC_MspUg81_Master" />
+	<add xdt:Locator="Match(name)" xdt:Transform="Replace" name="web" connectionString="user id=sa;password=password1;Data Source=devserver3;Database=SC_MspUg81_Web" />
+	<add xdt:Locator="Match(name)" xdt:Transform="Replace" name="analytics" connectionString="mongodb://devserver3/SC_MspUg81_analytics" />
+	<add xdt:Locator="Match(name)" xdt:Transform="Replace" name="tracking.live" connectionString="mongodb://devserver3/SC_MspUg81_tracking_live" />
+	<add xdt:Locator="Match(name)" xdt:Transform="Replace" name="tracking.history" connectionString="mongodb://devserver3/SC_MspUg81_tracking_history" />
+	<add xdt:Locator="Match(name)" xdt:Transform="Replace" name="tracking.contact" connectionString="mongodb://devserver3/SC_MspUg81_tracking_contact" />
+	<add xdt:Locator="Match(name)" xdt:Transform="Replace" name="reporting" connectionString="user id=sa;password=password1;Data Source=devserver3;Database=SC_MspUg81_Analytics" />
+</connectionStrings>

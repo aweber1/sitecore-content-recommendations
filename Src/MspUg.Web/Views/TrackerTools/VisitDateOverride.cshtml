@@ -1,0 +1,48 @@
+﻿@*@model LaunchSitecore.Models.VisitInformation*@
+<div id="visit-date">
+    <i class="moon-droplet"></i>
+    <input id="visitDateCalendar" type="date" class="form-control" />
+</div>
+
+<script type="text/javascript" src="/assets/js/moment.min.js"></script>
+<script type="text/javascript" src="/assets/js/jquery.cookie.js"></script>
+<script>
+    jQuery(function() {
+
+        var date = jQuery.cookie("simulated-date");
+
+        if (date) {
+            jQuery('#visitDateCalendar').val(date);
+            SetSimulatedDate(date);
+        }
+
+        jQuery("#visitDateCalendar").change(function() {
+
+            var $this = jQuery(this);
+            var simulatedDate = $this.val();
+
+            if (!simulatedDate) {
+                console.log("empty simulated date");
+                return;
+            }
+
+            setTimeout(function() {
+                SetSimulatedDate(simulatedDate);
+            }, 500);
+
+        });
+    });
+
+    function SetSimulatedDate(date) {
+        jQuery.cookie("simulated-date", date, { path: '/' });
+
+        jQuery.ajax({
+            type: "POST",
+            url: '/api/sitecore/trackertools/simulatevisitdate',
+            data: JSON.stringify({ date: new Date(date) }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        });
+    }
+</script>
+
