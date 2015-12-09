@@ -1,4 +1,7 @@
 ﻿@model MspUg.Web.Models.Recommendations
+@{
+    var recommendedPages = Model.GetRecommendedPages();
+}
 
 <div id="pnlRecommendations" data-context-id="@Sitecore.Context.Item.ID">
     <h3 class="center-title">
@@ -6,8 +9,7 @@
     </h3>
     <div style="clear: both"></div>
 
-
-    @if (!Model.RecommendedPages.Any())
+    @if (recommendedPages.Count == 0)
     {
         <div>
             <div class="image-wrapper"><img src="/assets/img/nope.png" alt="Unknown" /></div>
@@ -18,7 +20,7 @@
     else
     {
         <div class="list-group">
-            @foreach (var item in Model.RecommendedPages)
+            @foreach (var item in recommendedPages.Values)
             {
                 var target = string.Empty;
                 if (item.OpenInBlankWindow)

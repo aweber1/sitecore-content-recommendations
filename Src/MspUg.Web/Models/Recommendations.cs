@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using LaunchSitecore.Models;
 using Sitecore.Analytics;
 using System.Linq;
+using Sitecore;
 using Sitecore.Data;
 using Sitecore.Diagnostics;
 using Sitecore.Links;
@@ -15,44 +16,58 @@ namespace MspUg.Web.Models
 {
 	public class Recommendations
 	{
-		public IEnumerable<GenericLink> RecommendedPages
+		public Dictionary<Guid, GenericLink> GetRecommendedPages()
 		{
-			get
+			var recommendedPages = new Dictionary<Guid, GenericLink>();
+
+			if (Tracker.Current.Interaction.Pages.Length <= 1)
+				return recommendedPages;
+
+			var currentPageSequence = Tracker.Current.Interaction.Pages.OrderBy(p => p.VisitPageIndex).Select(p => p.Item.Id).ToArray();
+			//this where statement removes consecutive duplicates in the sequence.
+			//for instance, given this array of numbers: [1, 2, 2, 3, 1, 1, 5, 6, 6, 8]
+			//we want to return: [1, 2, 3, 1, 5, 6, 8]
+			//which is what we want to do for the page ID sequence. remove consecutive duplicates to filter out noise like page refreshes.
+			currentPageSequence = currentPageSequence.Where((id, i) => i == 0 || (currentPageSequence.Length > i && id != currentPageSequence[i - 1])).ToArray();
+
+			var treeManager = new TreeManager(ApplicationContainer.GetTreeProvider(), ApplicationContainer.GetTreeCache());
+			var tree = treeManager.GetTree(Guid.Parse("{68E713D8-A382-4378-8FB0-9D7F7AD14B25}"), DateTime.UtcNow.AddDays(-7), DateTime.UtcNow.AddDays(1));
+			if (tree?.Root == null)
 			{
-				var recommendedPages = new List<GenericLink>();
-
-				if (Tracker.Current.Interaction.Pages.Length <= 1)
-					return recommendedPages;
-
-				var currentSequence = Tracker.Current.Interaction.Pages.OrderBy(p => p.VisitPageIndex).Select(p => p.Item.Id);
-
-				var treeManager = new TreeManager(ApplicationContainer.GetTreeProvider(), ApplicationContainer.GetTreeCache());
-				var tree = treeManager.GetTree(Guid.Parse("{68E713D8-A382-4378-8FB0-9D7F7AD14B25}"), DateTime.UtcNow.AddDays(-7), DateTime.UtcNow.AddDays(1));
-				if (tree?.Root == null)
-				{
-					return recommendedPages;
-				}
-				
-				var allRecommendations = GetAllPossibleRecommendations(tree.Root, currentSequence.ToArray()).ToList();
-
-				//NOTE: this is where we could filter the recommendations further
-				//currently just ordering by subtree count descending
-				foreach (var page in allRecommendations.OrderByDescending(p => p.SubtreeCount))
-				{
-					var item = Sitecore.Context.Database.GetItem(ID.Parse(page.RecordId));
-					if (item == null)
-					{
-						continue;
-					}
-					
-					var name = item.DisplayName;
-					var url = LinkManager.GetItemUrl(item);
-
-					recommendedPages.Add(new GenericLink(name, url, true));
-				}
-				
 				return recommendedPages;
 			}
+				
+			var allRecommendations = GetAllPossibleRecommendations(tree.Root, currentPageSequence).ToList();
+
+			//NOTE: this is where we could filter the recommendations further
+			//currently just ordering by combined subtree value and subtree count in descending order (most valuable first)
+			//also filtering out the home item
+			var excludedItems = new[]
+			{
+				Guid.Parse("{110D559F-DEA5-42EA-9C1C-8A5DF7E70EF9}")
+			};
+
+			foreach (var pageNode in allRecommendations.OrderByDescending(p => p.SubtreeValue + p.SubtreeCount).Where(p => !excludedItems.Contains(p.RecordId)))
+			{
+				var id = pageNode.RecordId;
+				if (recommendedPages.ContainsKey(id))
+				{
+					continue;
+				}
+
+				var item = Context.Database.GetItem(ID.Parse(id));
+				if (item == null)
+				{
+					continue;
+				}
+					
+				var name = item.DisplayName;
+				var url = LinkManager.GetItemUrl(item);
+
+				recommendedPages.Add(id, new GenericLink(name, url, false));
+			}
+				
+			return recommendedPages;
 		}
 
 		public IEnumerable<PageNode> GetAllPossibleRecommendations(INode startNode, Guid[] pageSequence)
