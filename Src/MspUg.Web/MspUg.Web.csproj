@@ -118,11 +118,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\css\custom.css" />
-    <Content Include="assets\js\custom.js" />
     <Content Include="assets\js\recommendations.js" />
     <Content Include="Global.asax" />
-    <Content Include="_Build\Transforms\Web.Config.Common" />
-    <Content Include="_Build\Transforms\Web.Config.Local" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -151,19 +148,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\TrackerTools\FlushSessionTool.cshtml" />
-    <Content Include="Views\TrackerTools\VisitDateOverride.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\ShowPageEditorAlert.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\Flush.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\Main.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Navigation\Header.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Recommendations\Recommendations.cshtml" />
