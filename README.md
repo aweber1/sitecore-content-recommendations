@@ -4,7 +4,7 @@ This is a very basic, very raw sample of how you **might** build a recommendatio
 
 ## Dependencies
 - Sitecore 8.1 (or later).
-- There is a TDS project in the solution, but you could restore the items via normal Sitecore serialization also.
+- There is a TDS project in the solution, but you could restore the items via normal Sitecore serialization also. You only need the items if you're using Launch Sitecore.
 - The project was built against Launch Sitecore 8124, but that is not necessarily a hard dependency. The recommendations code can be extracted for use elsewhere.
 
 ## Notes
