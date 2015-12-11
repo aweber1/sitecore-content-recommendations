@@ -1,6 +1,6 @@
 # Sitecore Content Recommendation Engine
 
-This is a very basic, very raw sample of how you **might** build a recommendation engine using the Sitecore Path Analyzer API. This is meant to spark interest and provide inspiration. Path Analyzer is not just for visualization!
+This is a very basic, very raw sample of how you **might** build a recommendation engine using the Sitecore Path Analyzer API. This project is meant to spark interest and provide inspiration. Path Analyzer is not just for visualization!
 
 ## Dependencies
 - Sitecore 8.1 (or later).
