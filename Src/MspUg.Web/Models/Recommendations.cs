@@ -31,21 +31,24 @@ namespace MspUg.Web.Models
 			currentPageSequence = currentPageSequence.Where((id, i) => i == 0 || (currentPageSequence.Length > i && id != currentPageSequence[i - 1])).ToArray();
 
 			var treeManager = new TreeManager(ApplicationContainer.GetTreeProvider(), ApplicationContainer.GetTreeCache());
+			//Use the PathAnalyzer API to retrieve the 'All Site Experience' tree for the last week.
 			var tree = treeManager.GetTree(Guid.Parse("{68E713D8-A382-4378-8FB0-9D7F7AD14B25}"), DateTime.UtcNow.AddDays(-7), DateTime.UtcNow.AddDays(1));
 			if (tree?.Root == null)
 			{
 				return recommendedPages;
 			}
-				
+			
+			//retrieve all possible recommendations
 			var allRecommendations = GetAllPossibleRecommendations(tree.Root, currentPageSequence).ToList();
 
-			//NOTE: this is where we could filter the recommendations further
-			//currently just ordering by combined subtree value and subtree count in descending order (most valuable first)
-			//also filtering out the home item
 			var excludedItems = new[]
 			{
 				Guid.Parse("{110D559F-DEA5-42EA-9C1C-8A5DF7E70EF9}")
 			};
+			
+			//NOTE: this is where we could filter the recommendations further
+			//currently just ordering by combined subtree value and subtree count in descending order (most valuable first)
+			//also filtering out the home item
 
 			foreach (var pageNode in allRecommendations.OrderByDescending(p => p.SubtreeValue + p.SubtreeCount).Where(p => !excludedItems.Contains(p.RecordId)))
 			{
@@ -82,10 +85,20 @@ namespace MspUg.Web.Models
 				return recommendations;
 			}
 
+			/*
+			The basic algorithm is this:
+			- Given the pages from the current interaction as a sequence, we are attempting to find all matching sequences in the provided map.
+			- When we find a match, we retrieve the 'next' pages in the sequence from the map. 
+			- Those 'next' pages are considered possible recommendations, which we return from this method for further filtering.
+			*/
+			
+			//extract the first page id from the pages in the current interaction
 			var firstPageId = pageSequence.FirstOrDefault();
 
+			//Find all nodes in the map that match the first page id
 			var startNodes = startNode.Nodes.Cast<PageNode>().Where(n => n.RecordId == firstPageId);
 			
+			//iterate all the 'first page id' nodes, recursively processing child nodes to try to match the given page sequence
 			foreach (var node in startNodes)
 			{
 				var possibleRecommendations = new List<PageNode>();
@@ -114,7 +127,7 @@ namespace MspUg.Web.Models
 			{
 				if (child.RecordId == pageSequence[index])
 				{
-					//match! continue processing children
+					//we found a match! so continue processing children to determine if more matches occur.
 					ProcessChildren(index + 1, pageSequence, child, recommendations);
 				}
 			}
